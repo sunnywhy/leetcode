@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// 移除链表元素
 type ListNode struct {
 	Val int
 	Next *ListNode
