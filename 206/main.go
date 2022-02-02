@@ -6,7 +6,7 @@
 	 Next *ListNode //
  }
 
- func reverseList(head *ListNode) *ListNode {
+ func reverseList1(head *ListNode) *ListNode {
 	 dummy := &ListNode{}
 	 for head != nil {
 		temp := head.Next
@@ -15,4 +15,15 @@
 		head = temp
 	 }
 	 return dummy.Next
+ }
+
+ // recursion
+ func reverseList(head *ListNode) *ListNode {
+	 if head == nil || head.Next == nil {
+		 return head
+	 }
+	 p := reverseList(head.Next)
+	 head.Next.Next = head
+	 head.Next = nil
+	 return p
  }
