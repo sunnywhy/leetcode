@@ -20,26 +20,26 @@ func (h minHeap) Less(i, j int) bool {
 func (h minHeap) Swap(i, j int) {
 	h[i], h[j] = h[j], h[i]
 }
-
-func (h *minHeap) Push(x interface{}) {
-	*h = append(*h, x.(*ListNode))
+func (h *minHeap) Push(v interface{}) {
+	*h = append(*h, v.(*ListNode))
 }
-
 func (h *minHeap) Pop() interface{} {
 	n := len(*h)
-	top := (*h)[n-1]
+	v := (*h)[n-1]
 	*h = (*h)[:n-1]
-	return top
+	return v
 }
+
 func mergeKLists(lists []*ListNode) *ListNode {
-	h := &minHeap{}
-	for _, v := range lists {
-		if v != nil {
-			heap.Push(h, v)
-		}
-	}
 	dummy := &ListNode{}
 	tail := dummy
+	h := &minHeap{}
+	for _, node := range lists {
+		if node != nil {
+			heap.Push(h, node)
+		}
+	}
+
 	for h.Len() > 0 {
 		cur := heap.Pop(h).(*ListNode)
 		tail.Next = cur
