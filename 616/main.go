@@ -38,3 +38,38 @@ func addBoldTag(s string, words []string) string {
 	sb.Write(chars[prev:])
 	return sb.String()
 }
+
+func addBoldTag2(s string, words []string) string {
+	bytes := []byte(s)
+	n := len(bytes)
+	tags := make([]bool, n)
+
+	var end int
+	for i := 0; i < n; i++ {
+		for _, w := range words {
+			if strings.HasPrefix(s[i:], w) {
+				if i+len(w) > end {
+					end = i + len(w)
+				}
+			}
+			tags[i] = end > i
+		}
+	}
+
+	var sb strings.Builder
+	for i := 0; i < n; {
+		if !tags[i] {
+			sb.WriteByte(bytes[i])
+			i++
+		} else {
+			start := i
+			for i < n && tags[i] {
+				i++
+			}
+			sb.WriteString("<b>")
+			sb.Write(bytes[start:i])
+			sb.WriteString("</b>")
+		}
+	}
+	return sb.String()
+}
