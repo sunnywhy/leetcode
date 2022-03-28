@@ -4,19 +4,15 @@ package main
 
 func dailyTemperatures(temperatures []int) []int {
 	n := len(temperatures)
-	stack := []int{}
-	answers := make([]int, n)
-	for k, v := range temperatures {
-		if len(stack) == 0 || temperatures[stack[len(stack)-1]] >= v {
-			stack = append(stack, k)
-			continue
-		}
-		for len(stack) > 0 && temperatures[stack[len(stack)-1]] < v {
-			idx := stack[len(stack)-1]
-			answers[idx] = k - idx
+	res := make([]int, n)
+	stack := make([]int, 0)
+
+	for i, t := range temperatures {
+		for len(stack) > 0 && temperatures[stack[len(stack)-1]] < t {
+			res[stack[len(stack)-1]] = i - stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 		}
-		stack = append(stack, k)
+		stack = append(stack, i)
 	}
-	return answers
+	return res
 }
