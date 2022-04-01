@@ -14,29 +14,27 @@ var res int
 
 func maxPathSum(root *TreeNode) int {
 	res = math.MinInt
-	calculate(root)
+	checkAndCalculate(root)
+	if res == math.MinInt {
+		return 0
+	}
 	return res
 }
-func calculate(root *TreeNode) int {
+
+func checkAndCalculate(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
-	total := root.Val
-	left := calculate(root.Left)
-	right := calculate(root.Right)
-
-	if left > 0 {
-		total += left
+	left := checkAndCalculate(root.Left)
+	right := checkAndCalculate(root.Right)
+	if left < 0 {
+		left = 0
 	}
-	if right > 0 {
-		total += right
+	if right < 0 {
+		right = 0
 	}
-	if total > res {
-		res = total
+	if res < left+right+root.Val {
+		res = left + right + root.Val
 	}
-	if left > 0 || right > 0 {
-		return root.Val + int(math.Max(float64(left), float64(right)))
-	} else {
-		return root.Val
-	}
+	return root.Val + int(math.Max(float64(left), float64(right)))
 }
