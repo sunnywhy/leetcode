@@ -5,59 +5,57 @@ package main
 var res []string
 
 func removeInvalidParentheses(s string) []string {
-	res = nil
-	var lefts, rights int
+	var left, right int
 	for _, c := range s {
 		if c == '(' {
-			lefts++
+			left++
 		} else if c == ')' {
-			if lefts > 0 {
-				lefts--
+			if left > 0 {
+				left--
 			} else {
-				rights++
+				right++
 			}
 		}
 	}
 
-	backtracking(s, 0, lefts, rights)
-
+	res = nil
+	backtracking(s, left, right, 0)
 	return res
 }
 
-func backtracking(s string, start, lefts, rights int) {
-	if lefts == 0 && rights == 0 {
+func backtracking(s string, left, right int, pos int) {
+	if left == 0 && right == 0 {
 		if valid(s) {
 			res = append(res, s)
 		}
 		return
 	}
-
-	for i := start; i < len(s); i++ {
-		if i > start && s[i] == s[i-1] {
+	for i := pos; i < len(s); i++ {
+		if i > pos && s[i-1] == s[i] {
 			continue
 		}
-		if s[i] == ')' && rights > 0 {
-			chars := []rune(s)
-			cur := string(append(chars[:i], chars[i+1:]...))
-			backtracking(cur, i, lefts, rights-1)
-		} else if s[i] == '(' && lefts > 0 {
-			chars := []rune(s)
-			cur := string(append(chars[:i], chars[i+1:]...))
-			backtracking(cur, i, lefts-1, rights)
+		if right > 0 {
+			if s[i] == ')' {
+				backtracking(s[:i]+s[i+1:], left, right-1, i)
+			}
+		} else if left > 0 {
+			if s[i] == '(' {
+				backtracking(s[:i]+s[i+1:], left-1, right, i)
+			}
 		}
 	}
 }
-
 func valid(s string) bool {
 	var count int
 	for _, c := range s {
 		if c == '(' {
 			count++
 		} else if c == ')' {
-			if count == 0 {
+			if count > 0 {
+				count--
+			} else {
 				return false
 			}
-			count--
 		}
 	}
 	return count == 0
