@@ -9,22 +9,20 @@ type Node struct {
 }
 
 func copyRandomList(head *Node) *Node {
-	dummy := &Node{}
-	tail := dummy
-	original := head
-	m := make(map[*Node]*Node) // original -> copy
-
-	for original != nil {
-		cur := &Node{Val: original.Val}
-		m[original] = cur
-		tail.Next = cur
-		tail = tail.Next
-		original = original.Next
+	if head == nil {
+		return nil
+	}
+	dataMap := make(map[*Node]*Node)
+	cur := head
+	for cur != nil {
+		newNode := &Node{Val: cur.Val}
+		dataMap[cur] = newNode
+		cur = cur.Next
 	}
 
-	for head != nil {
-		m[head].Random = m[head.Random]
-		head = head.Next
+	for original, copied := range dataMap {
+		copied.Next = dataMap[original.Next]
+		copied.Random = dataMap[original.Random]
 	}
-	return dummy.Next
+	return dataMap[head]
 }
