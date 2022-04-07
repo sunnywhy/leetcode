@@ -1,6 +1,6 @@
 package main
 
-// O(NLogN)
+// O(NLogN), easy to understand
 func maxLength(ribbons []int, k int) int {
 	var max int
 	for _, v := range ribbons {
@@ -31,4 +31,32 @@ func getRibbons(ribbons []int, length int) int {
 		total += v / length
 	}
 	return total
+}
+
+// O(N*LogN), shorter
+func maxLength2(ribbons []int, k int) int {
+	var max int
+	for _, v := range ribbons {
+		if v > max {
+			max = v
+		}
+	}
+
+	l, r := 1, max+1
+	for l < r {
+		m := l + (r-l)/2
+		if !valid(ribbons, k, m) {
+			r = m
+		} else {
+			l = m + 1
+		}
+	}
+	return l - 1
+}
+func valid(ribbons []int, k int, size int) bool {
+	var total int
+	for _, v := range ribbons {
+		total += v / size
+	}
+	return total >= k
 }
