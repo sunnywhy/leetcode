@@ -3,31 +3,29 @@ package main
 import "strings"
 
 // Word Break II
-func wordBreak(s string, wordDict []string) []string {
-	wordMap := make(map[string]bool)
-	for _, w := range wordDict {
-		wordMap[w] = true
-	}
+var res []string
 
-	var res, cur []string
-	backtracking([]rune(s), wordMap, 0, &cur, &res)
+func wordBreak(s string, wordDict []string) []string {
+	res = nil
+	wordMap := make(map[string]bool)
+	for _, word := range wordDict {
+		wordMap[word] = true
+	}
+	var cur []string
+	backtracking(s, wordMap, 0, &cur)
 	return res
 }
-
-func backtracking(chars []rune, wordMap map[string]bool, start int, cur, res *[]string) {
-	if start == len(chars) {
-		*res = append(*res, strings.Join(*cur, " "))
+func backtracking(s string, wordMap map[string]bool, pos int, cur *[]string) {
+	if pos >= len(s) {
+		res = append(res, strings.Join(*cur, " "))
 		return
 	}
-
-	for i := start; i < len(chars); i++ {
-		w := string(chars[start : i+1])
-		if !wordMap[w] {
-			continue
+	for i := pos; i < len(s); i++ {
+		temp := s[pos : i+1]
+		if wordMap[temp] {
+			*cur = append(*cur, temp)
+			backtracking(s, wordMap, i+1, cur)
+			*cur = (*cur)[:len(*cur)-1]
 		}
-
-		*cur = append(*cur, w)
-		backtracking(chars, wordMap, i+1, cur, res)
-		*cur = (*cur)[:len(*cur)-1]
 	}
 }
