@@ -2,43 +2,38 @@ package main
 
 // Find First and Last Position of Element in Sorted Array
 func searchRange(nums []int, target int) []int {
-	res := make([]int, 2)
-	res[0], res[1] = findFirst(nums, target), findLast(nums, target)
-	return res
+	first := findFirst(nums, target)
+	last := findLast(nums, target)
+	return []int{first, last}
 }
+
 func findFirst(nums []int, target int) int {
-	left, right := 0, len(nums)-1
-	for left <= right {
-		mid := left + (right-left)/2
-		if nums[mid] == target {
-			if mid == 0 || nums[mid-1] != target {
-				return mid
-			} else {
-				right = mid - 1
-			}
-		} else if nums[mid] > target {
-			right = mid - 1
+	l, r := 0, len(nums)
+	for l < r {
+		m := l + (r-l)/2
+		if nums[m] >= target {
+			r = m
 		} else {
-			left = mid + 1
+			l = m + 1
 		}
+	}
+	if l < len(nums) && nums[l] == target {
+		return l
 	}
 	return -1
 }
 func findLast(nums []int, target int) int {
-	left, right := 0, len(nums)-1
-	for left <= right {
-		mid := left + (right-left)/2
-		if nums[mid] == target {
-			if mid == len(nums)-1 || nums[mid+1] != target {
-				return mid
-			} else {
-				left = mid + 1
-			}
-		} else if nums[mid] > target {
-			right = mid - 1
+	l, r := 0, len(nums)
+	for l < r {
+		m := l + (r-l)/2
+		if nums[m] > target {
+			r = m
 		} else {
-			left = mid + 1
+			l = m + 1
 		}
+	}
+	if l > 0 && nums[l-1] == target {
+		return l - 1
 	}
 	return -1
 }
