@@ -23,3 +23,29 @@ func maximumSwap(num int) int {
 	val, _ := strconv.Atoi(string(chars))
 	return val
 }
+
+// Method 2
+func maximumSwap2(num int) int {
+	if num == 0 {
+		return 0
+	}
+	str := strconv.Itoa(num)
+	data := []byte(str)
+
+	max := 9
+	for i := 0; i < len(data)-1; i++ {
+		cur := int(data[i] - '0')
+		for j := max; j > cur; j-- {
+			for k := len(data) - 1; k > i; k-- {
+				if int(data[k]-'0') == j {
+					data[i], data[k] = data[k], data[i]
+					val, _ := strconv.Atoi(string(data))
+					return val
+				}
+			}
+
+		}
+		max = cur
+	}
+	return num
+}
